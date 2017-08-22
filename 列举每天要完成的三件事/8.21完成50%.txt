@@ -1,0 +1,11 @@
+1. 优先完成8.20讲解的内容，复习和不要留遗留问题
+
+2. 数据库事务学习，分布式事务学习
+
+3. rocketmq视频学习 ----->  修改成rocketmq文档学习，视频听说很冗余
+
+4. redis集群扩展收尾   
+
+5. zookeeper 分布式锁  done
+
+6. select .. for update

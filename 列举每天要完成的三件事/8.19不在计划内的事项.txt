@@ -1,0 +1,4 @@
+1.授课听取了nosql数据库和sql数据库的概念上的差异；应用上的差别；nosql数据库的优缺点并总结成文档
+
+2.授课听取了hdfs和map reduce，一个是大数据存储，另一个是大数据计算；其中重点讲了两个编程模型图和hadoop1.0中hdfs(namenode,datanode);map reduce
+  (jobTracker和taskTracker)实现了哪些接口，接口对应实现功能
