@@ -1,1 +1,2 @@
-部署tomcat服务到node4和node5
+﻿1.部署tomcat服务到node4和node5      ---      ok
+2.
