@@ -1,0 +1,5 @@
+1. 数据库视频学习     oracle 环境OK，基本sql语句视频看完
+
+2. rocketmq文档学习   未完成
+
+3. ngix和keepalive学习   OK 80%   ---不在计划内事项：lua和redis
