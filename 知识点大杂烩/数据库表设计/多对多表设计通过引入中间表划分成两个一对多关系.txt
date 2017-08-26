@@ -1,0 +1,30 @@
+在完成角色管理是，首先我们有一个角色表，其次要有一个菜单表。他们之间是多对多的关系，即一个角色对应多条菜单，同时一条菜单可以对应多个角色。
+1. 角色表
+CREATE TABLE `js` (
+  `jsid` int(11) NOT NULL auto_increment,
+  `jsmc` varchar(20) default NULL,
+  PRIMARY KEY  (`jsid`)
+) ENGINE=InnoDB DEFAULT CHARSET=gb2312;
+
+
+2. 菜单信息表
+CREATE TABLE `cdxx` (
+  `cdxxid` int(11) NOT NULL auto_increment,
+  `cdxxmc` varchar(40) default NULL,
+  PRIMARY KEY  (`cdxxid`)
+) ENGINE=InnoDB DEFAULT CHARSET=gb2312;
+
+
+为了实现表之间多对多的关系，必须将一个多对多的关系通过一个中间表分为两个一对多的关系。因此引入第三张表，角色关系表。
+CREATE TABLE `jsgx` (
+  `jsgxid` int(11) NOT NULL auto_increment,
+  `jsid` int(11) default NULL,
+  `cdxxid` int(11) default NULL,
+  `access` int(11) default NULL,
+  PRIMARY KEY  (`jsgxid`),
+  KEY `jsid` (`jsid`),
+  KEY `cdxxid` (`cdxxid`),
+  CONSTRAINT `jsgx_ibfk_1` FOREIGN KEY (`jsid`) REFERENCES `js` (`jsid`),
+  CONSTRAINT `jsgx_ibfk_2` FOREIGN KEY (`cdxxid`) REFERENCES `cdxx` (`cdxxid`)
+) ENGINE=InnoDB DEFAULT CHARSET=gb2312;
+
