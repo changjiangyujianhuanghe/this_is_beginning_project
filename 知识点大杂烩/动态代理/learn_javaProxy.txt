@@ -1,0 +1,35 @@
+jdk动态代理核心方法：
+
+    Object newProxyInstance(ClassLoader paramClassLoader(被代理类的classLoader),
+Class<?> paramArrayOfClass(被代理类实现的接口，需要被代理的接口),
+InvocationHandler paramInvocationHandler （具体要执行的代理方法，通过实现invocationHandler的invoke方法）)
+
+
+    public static void main(String[] args) {  
+        UserService userService = new UserServiceImpl();  
+        InvocationHandler invocationHandler = new MyInvocationHandler(userService);  
+        UserService userServiceProxy = (UserService)Proxy.newProxyInstance(userService.getClass().getClassLoader(),  
+                userService.getClass().getInterfaces(), invocationHandler);  
+        System.out.println(userServiceProxy.getName(1));  
+        System.out.println(userServiceProxy.getAge(1));  
+    }  
+
+
+    @Test  
+    public void test(){  
+        Transaction transaction = new Transaction();  
+        PersonDao target = new PersonDaoImpl();  
+        MyInterceptor interceptor = new MyInterceptor(target, transaction);  
+        PersonDao personDao = (PersonDao) Proxy.newProxyInstance(target.getClass().getClassLoader(), target.getClass().getInterfaces(), interceptor);  
+        personDao.deletePerson();  
+        System.out.println("=============================");  
+        personDao.savePerson();  
+        System.out.println("=============================");  
+        personDao.updatePerson();  
+        System.out.println("=============================");  
+        for(Person person : personDao.getPersons()){  
+            System.out.println(person.getPnameString());  
+        }  
+    }  
+
+    

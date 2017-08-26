@@ -1,0 +1,7 @@
+1. oracle收尾
+
+2. 写个java动态代理的例子，把这个文章总结一下：http://blog.csdn.net/moreevan/article/details/11977115/ 
+
+3. nginx看完
+
+4. rocketMQ理论和代码
