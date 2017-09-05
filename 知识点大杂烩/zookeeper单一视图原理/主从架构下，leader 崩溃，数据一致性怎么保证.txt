@@ -1,0 +1,15 @@
+1. zookeeper客户端随机连接到一个Zookeeper集群节点上
+   如果是读请求就直接通过当前节点来获取，如果是写请求
+   那么节点就会向leader提交写事务，leader会广播事务，只要
+   超过半数节点写入成功，该写请求就会被提交
+   
+2. 主节点崩溃，进行leader选举，只要有一个节点得到超过半数的投票，它就可以当选leader
+   这个时候这个节点是准leader，进入发现&同步阶段
+   
+   发现 followers 最近接收的事务提议。这个一阶段的主要目的是发现当前大多数节点接收的最新提议leader生成epoch让followers接受，更新它们的 acceptedEpoch
+   （Fast Leader Election通过选举zxid最大的节点为leader省去发现新提议的过程）
+   
+   同步阶段  同步阶段主要是利用 leader 前一阶段获得的最新提议历史，同步集群中所有的副本。只有当 quorum （超过半数）都同步完成，准 leader 才会成为真正的 leader。
+   follower 只会接收 zxid 比自己的 lastZxid 大的提议。 （最终数据一致性）
+   
+   

@@ -1,0 +1,57 @@
+﻿1. 关于Statement对象：
+
+   Use the for general-purpose access to your database. 
+   Useful when you are using static SQL statements at runtime. 
+   The Statement interface cannot accept parameters
+   
+   statement has three methods:
+   boolean execute (String SQL)
+   int executeUpdate (String SQL)
+   ResultSet executeQuery (String SQL)
+   
+     JDBC在编译时并不对要执行的SQL语句检测,只是把它看着一个String,只有在驱动
+程序执行SQL语句时才知道正确与否.
+  一个Statement对象同时只能有一个结果集在活动.这是宽容性的,就是说即使没有
+调用ResultSet的close()方法,只要打开第二个结果集就隐含着对上一个结果集的关闭.所以
+如果你想同时对多个结果集操作,就要创建多个Statement对象,如果不需要同时操作,那么可
+以在一个Statement对象上须序操作多个结果集.
+
+
+
+   所以如果要同时操作多个结果集一定要让它他绑定到不同的Statement对象上.好在一个connection
+对象可以创建任意多个Statement对象,而不需要你重新获取连结.
+
+
+
+
+另外PreparedStatement还支持接收参数.在预编译后只要传输不同的参数就可以执行,大大
+提高了性能.
+    
+  PreparedStatement ps = conn.prepareStatement(\"select * from 表 where 字段=?\");
+  ps.setString(1,参数);
+  ResultSet rs = ps.executeQuery();
+  
+  CallableStatement:是PreparedStatement的子类,它只是用来执行存储过程的.
+  CallableStatement sc = conn.prepareCall(\"{call query()}\");
+  ResultSet rs = cs.executeQuery();
+
+
+
+
+Creating PreparedStatement Object
+
+
+
+
+      System.out.println("Creating statement...");
+      String sql = "UPDATE Employees set age=? WHERE id=?";
+      stmt = conn.prepareStatement(sql);
+      
+      //Bind values into the parameters.
+      stmt.setInt(1, 35);  // This would set age
+      stmt.setInt(2, 102); // This would set ID
+
+
+
+
+   

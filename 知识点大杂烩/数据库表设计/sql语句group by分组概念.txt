@@ -1,0 +1,18 @@
+
+   聚合函数一般有：
+   SUM, COUNT, MAX, MIN, AVG等
+   
+   Group by一般和聚合函数在一起使用才有意义，使用group by的两个要素：  
+   (1) 出现在select后面的字段 要么是是聚合函数中的,要么就是group by 中的
+       
+       统计每个班的学生人数
+       select class_id,class_name,count(student_id) from student group by class_id,class_name;  
+
+       查询每个部门的平均薪水之后显示部门平均薪水大于2000的部门编号和其平均薪水
+       Select DEPTNO,AVG(SAL) AS TEST FROM EMP GROUP BY DEPTNO HAVING AVG(SAL) > 2000
+
+       查询每个部门的薪水汇总和平均薪水
+       SELECT DEPTNO,SUM(SAL),AVG(SAL) FROM EMP group by DEPTNO
+    
+
+   (2) 要筛选结果 可以先使用where 再用group by 或者先用group by 再用having

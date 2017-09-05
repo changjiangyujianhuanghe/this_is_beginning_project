@@ -1,0 +1,1 @@
+选举 leader 的时候，整个集群无法处理写请求的，如何快速进行 leader 选举？这是通过 Fast Leader Election 实现的，leader 的选举只需要超过半数的节点投票即可，这样不需要等待所有节点的选票，能够尽早选出 leader。

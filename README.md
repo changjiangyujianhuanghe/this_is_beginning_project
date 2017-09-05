@@ -1,2 +1,2 @@
 # this_is_beginning_project
-java web project for learning knowledge
+学习过程可视化

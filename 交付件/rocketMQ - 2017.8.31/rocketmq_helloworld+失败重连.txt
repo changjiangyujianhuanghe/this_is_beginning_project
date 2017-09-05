@@ -1,0 +1,53 @@
+rocketmq和kafuka的应用场景不同
+
+rocketmq 分布式事务，互联网金融
+
+kafuka 批量处理海量数据：日志，数据分析
+
+消息重试(producer->MQ中间件)：
+
+	producer ->消息中间件 ->consume
+
+	producer.send(msg,1000);//1秒钟没有发出去，就认为没有发送成功
+	
+	producer.setRetryTimesWhenSendFailed(3);//设置消息重试次数
+	
+消息重试(MQ中间件->consume)
+
+    重试不限次数，可能会导致消息重复发的问题
+	
+	consume处理请求抛出异常，返回：ConsumeConcurrentlyStatus.RECONSUME_LATER，会进行重试
+	
+	如果是正常的consume先订阅，后发布；那么是正常的一条，一次message接收函数只接收一条；失败也只是这一条数据在进行重试
+	
+	new MessageListenerConcurrently() {
+            @Override
+            public ConsumeConcurrentlyStatus consumeMessage(List<MessageExt> msgs,
+                    ConsumeConcurrentlyContext context)
+	
+	如果是海量数据，先发布数据到MQ，然后再启动consume，那么一次性处理十条数据，如果抛异常，就十条再重新发
+	
+    如果消息重试多次处理失败，则在catch块中返回success并同时对失败结果记录数据库或日志
+	
+	catch重试代码如下：
+	try{
+	
+	} catch (Exception e) {
+					System.out.println(e.getMessage());
+					if (msg.getReconsumeTimes() == 2) {
+						// 记录日志
+						System.out.println("重试两次之后还是没有成功，记录日志");
+
+						return ConsumeConcurrentlyStatus.CONSUME_SUCCESS;// 每次接收消息后，要有反馈
+					} else {
+						return ConsumeConcurrentlyStatus.RECONSUME_LATER;// 稍后再给我发送
+					}
+	}
+	
+	return ConsumeConcurrentlyStatus.CONSUME_SUCCESS;// 每次接收消息后，要有反馈
+			
+	
+	
+	
+	
+	

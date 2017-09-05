@@ -1,0 +1,2 @@
+1. 完成nio的学习和netty的学习
+2. 完成keepalived和nginx的部署学习
