@@ -1,0 +1,46 @@
+
+之前我们对访问的url通过拦截器进行拦截：
+
+代码如下：
+
+     /**
+      * 在执行Controller的方法之前进行拦截
+      */
+     public boolean preHandle(HttpServletRequest request, HttpServletResponse response, Object handler) throws Exception { 
+         String requestUrl = request.getRequestURI();
+
+         //可以用这种方式对Controller进行拦截
+         if (requestUrl.indexOf(".do")!=-1) {
+        	 //判断用户是否登录，如果用户没有登录，则重定向到登录页面，并返回false，否则返回true
+	         if(request.getSession().getAttribute("loginUser") == null){
+	        	 String contextPath=request.getContextPath();
+	        	 // 如果用户没有登录，则重定向到登录页面	        	 
+	        	 response.sendRedirect(contextPath+"/login.jsp");
+	        	 return false;
+	         }
+         }
+
+         return true;
+     }
+	 
+
+如果用户划分角色，不同用户有不同界面的访问权限，该如何操作呢？
+首先我们还是在request.getSession().getAttribute("loginUser")存储用户的角色信息
+然后借助servletContext.getAttribute("user_views")获取这个用户角色对应能够访问的视图信息
+servlet四大作用域（page,request,session,application）;servletContext对应的是application的作用域
+
+这样就可以动态的获取这个用户能够访问的视图列表有哪些，没有权限的列表不展示
+
+
+视图和角色对应关系如下：
+
+视图           用户角色        
+
+财务界面       admin
+人员管理       admin
+项目信息       admin,user
+代码统计       admin,user
+issue管理      admin,user
+
+
+

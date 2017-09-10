@@ -1,0 +1,59 @@
+
+
+<!-- springmvc 配置 加载springmvc.xml配置 -->
+<servlet>
+	<servlet-name>springmvc</servlet-name>
+	<servlet-class>org.springframework.web.servlet.DispatcherServlet</servlet-class>
+	<init-param>
+	    <param-name>contextConfigLocation</param-name>
+		<param-value>/WEB-INF/springmvc-servlet.xml</param-value>
+	</init-param>
+	<load-on-startup>1</load-on-startup>
+</servlet>
+
+<servlet-mapping>
+	<servlet-name>springmvc</servlet-name>
+	<url-pattern>*.do</url-pattern>
+</servlet-mapping>
+
+
+
+
+/**
+ * SecurityInterceptor 用于权限管理，对客户端请求进行拦截,在springmvc-servlet.xml文件内进行配置，此拦截器才起作用，详见springmvc-servlet.xml配置文件
+ */
+ 
+<!-- 配置拦截器 -->
+<bean class="org.springframework.web.servlet.mvc.annotation.DefaultAnnotationHandlerMapping">
+	<property name="interceptors">
+		<list>
+			<bean class="javacommon.springmvc.interceptor.SecurityInterceptor"/>
+			<bean class="javacommon.springmvc.interceptor.SharedRenderVariableInterceptor"/>				
+		</list>
+	</property>
+</bean>
+ 
+
+ 
+public class SecurityInterceptor extends HandlerInterceptorAdapter {
+
+     /**
+      * 在执行Controller的方法之前进行拦截
+      */
+     public boolean preHandle(HttpServletRequest request, HttpServletResponse response, Object handler) throws Exception { 
+         String requestUrl = request.getRequestURI();
+
+         //可以用这种方式对Controller进行拦截
+         if (requestUrl.indexOf(".do")!=-1) {
+        	 //判断用户是否登录，如果用户没有登录，则重定向到登录页面，并返回false，否则返回true
+	         if(request.getSession().getAttribute("loginUser") == null){
+	        	 String contextPath=request.getContextPath();
+	        	 // 如果用户没有登录，则重定向到登录页面	        	 
+	        	 response.sendRedirect(contextPath+"/login.jsp");
+	        	 return false;
+	         }
+         }
+
+         return true;
+     }
+}
